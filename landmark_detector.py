@@ -82,8 +82,3 @@ class LandmarkDetector:
 
     return landmarks, error_message
 
-
-detector = LandmarkDetector('./snapshots/SAN_300W_GTB_itn_cpm_3_50_sigma4_128x128x8/checkpoint_49.pth.tar')
-detector.preprocess_image('./cache_data/cache/test_1.jpg', [819.27, 432.15, 971.70, 575.87])
-landmarks, error_message = detector.predict()
-print(landmarks)
