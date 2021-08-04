@@ -1,8 +1,3 @@
-#import numpy as np
-#import torch
-#from pathlib import Path
-#import models
-
 from __future__ import division
 
 import os, sys, time, random, argparse, PIL
@@ -18,7 +13,7 @@ import datasets
 from visualization import draw_image_by_points
 from san_vision import transforms
 from utils import time_string, time_for_file, get_model_infos
-
+import cv2
 
 if torch.cuda.is_available():
   device = 'cuda'
@@ -52,7 +47,8 @@ class LandmarkDetector:
 
 
   def preprocess_image(self, image_path, face):
-    [image, _, _, _, _, _, self.cropped_size], meta = self.dataset.prepare_input(image_path, face)    
+    self.image_path = image_path
+    [image, _, _, _, _, _, self.cropped_size], meta = self.dataset.prepare_input(self.image_path, face)    
 
     with torch.no_grad():
         if device == 'cpu':
@@ -81,4 +77,8 @@ class LandmarkDetector:
         landmarks[(float(point[0]), float(point[1]))] = float(point[2])
 
     return landmarks, error_message
+
+  def save_image_with_points(self, save_path): 
+    image = draw_image_by_points(self.image_path, self.prediction, 1, (255,255,255), False)
+    cv2.imwrite(save_path, image)
 
