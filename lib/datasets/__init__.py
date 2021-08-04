@@ -4,7 +4,7 @@
 ### Computer Vision and Pattern Recognition, 2018          ###
 ##############################################################
 from .GeneralDataset import GeneralDataset
-from .dataset_utils import pil_loader
+from .dataset_utils import opencv_loader
 from .point_meta import Point_Meta
 from .dataset_utils import PTSconvert2str
 from .dataset_utils import PTSconvert2box

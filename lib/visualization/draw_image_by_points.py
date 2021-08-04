@@ -3,18 +3,15 @@
 ### Style Aggregated Network for Facial Landmark Detection ###
 ### Computer Vision and Pattern Recognition, 2018          ###
 ##############################################################
-from PIL import Image
-from PIL import ImageDraw
-from PIL import ImageFont
 import numpy as np
 from numpy import linspace
 from matplotlib import cm
 import datasets
+import cv2
 
-def draw_image_by_points(_image, pts, radius, color, crop, resize):
+def draw_image_by_points(_image, pts, radius, color, crop):
   if isinstance(_image, str):
-    _image = datasets.pil_loader(_image)
-  assert isinstance(_image, Image.Image), 'image type is not PIL.Image.Image'
+    _image = datasets.opencv_loader(_image)
   assert isinstance(pts, np.ndarray) and (pts.shape[0] == 2 or pts.shape[0] == 3), 'input points are not correct'
   image, pts = _image.copy(), pts.copy()
 
@@ -38,18 +35,12 @@ def draw_image_by_points(_image, pts, radius, color, crop, resize):
     pts[0, visiable_points] = pts[0, visiable_points] - x1
     pts[1, visiable_points] = pts[1, visiable_points] - y1
 
-  if resize:
-    width, height = image.size
-    image = image.resize((resize,resize), Image.BICUBIC)
-    pts[0, visiable_points] = pts[0, visiable_points] * 1.0 / width * resize
-    pts[1, visiable_points] = pts[1, visiable_points] * 1.0 / height * resize
-
-  draw  = ImageDraw.Draw(image)
   for idx in range(num_points):
     if visiable_points[ idx ]:
       # draw hollow circle
-      point = (pts[0,idx]-radius, pts[1,idx]-radius, pts[0,idx]+radius, pts[1,idx]+radius)
+      point = (pts[0,idx], pts[1,idx])
+      axesLength = (radius, radius)
       if radius > 0:
-        draw.ellipse(point, fill=None, outline=color)
+        image = cv2.ellipse(image, point, axesLength, 0, 0, 0, color=color)
 
   return image

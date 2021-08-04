@@ -4,6 +4,7 @@
 ### Computer Vision and Pattern Recognition, 2018          ###
 ##############################################################
 from PIL import Image
+import cv2
 from scipy.ndimage.interpolation import zoom
 from utils.file_utils import load_txt_file
 import numpy as np
@@ -14,6 +15,12 @@ def pil_loader(path):
   with open(path, 'rb') as f:
     with Image.open(f) as img:
       return img.convert('RGB')
+
+def opencv_loader(path):
+  # open path as file to avoid ResourceWarning (https://github.com/python-pillow/Pillow/issues/835)
+
+  img = cv2.imread(path)
+  return img
 
 def remove_item_from_list(list_to_remove, item):
   assert isinstance(list_to_remove, list), 'input list is not a list'

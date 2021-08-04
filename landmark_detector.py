@@ -73,11 +73,11 @@ class LandmarkDetector:
     scale_h, scale_w = cropped_size[0] * 1. / self.inputs.size(-2) , cropped_size[1] * 1. / self.inputs.size(-1)
 
     locations[:, 0], locations[:, 1] = locations[:, 0] * scale_w + cropped_size[2], locations[:, 1] * scale_h + cropped_size[3]
-    prediction = np.concatenate((locations, scores), axis=1).transpose(1,0)
+    self.prediction = np.concatenate((locations, scores), axis=1).transpose(1,0)
 
     landmarks = {}
     for i in range(self.param.num_pts):
-        point = prediction[:, i]
+        point = self.prediction[:, i]
         landmarks[(float(point[0]), float(point[1]))] = float(point[2])
 
     return landmarks, error_message
